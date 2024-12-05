@@ -1,3 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Aufgabe3</string>
+    <string name="no_booking_entries">There are no booking entries</string>
+
+    <string name="test">Test123</string>
 </resources>

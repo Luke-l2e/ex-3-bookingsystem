@@ -1,6 +1,8 @@
 package com.example.aufgabe3.ui.home
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -12,6 +14,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.aufgabe3.model.BookingEntry
 import com.example.aufgabe3.viewmodel.SharedViewModel
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,14 +46,24 @@ fun HomeScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            // TODO inform the user if no bookingsEntries otherwise LazyColumn for bookingsEntries
+            if (bookingsEntries.isEmpty()) {
+                Text("There are no booking entries")
+            } else {
+                LazyColumn {
+                    items(bookingsEntries) { bookingEntry ->
+                        BookingEntryItem(bookingEntry) {
+                            sharedViewModel.deleteBookingEntry(bookingEntry)
+                        }
+                    }
+                }
+            }
         }
     }
 }
 
 @Composable
 fun BookingEntryItem(
-    booking: BookingEntry,
+    bookingEntry: BookingEntry,
     onDeleteClick: () -> Unit
 ) {
     Card(
@@ -64,11 +80,17 @@ fun BookingEntryItem(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = // TODO display booking name,
+                    text = bookingEntry.name,
                     style = MaterialTheme.typography.titleMedium
                 )
+                val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(
+                    Locale.getDefault()
+                ).withZone(ZoneId.systemDefault())
+                val date = "${bookingEntry.arrivalDate.format(formatter)} - ${
+                    bookingEntry.departureDate.format(formatter)
+                }"
                 Text(
-                    text = // TODO display date in right format,
+                    text = date,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
