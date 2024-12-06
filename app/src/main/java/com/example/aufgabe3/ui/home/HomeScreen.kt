@@ -10,8 +10,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.aufgabe3.R
 import com.example.aufgabe3.model.BookingEntry
 import com.example.aufgabe3.viewmodel.SharedViewModel
 import java.time.ZoneId
@@ -30,14 +32,14 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Booking Entries") }
+                title = { Text(stringResource(R.string.app_name)) }
             )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 navController.navigate("add")
             }) {
-                Icon(Icons.Default.Add, contentDescription = "Add booking")
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_booking))
             }
         }
     ) { innerPadding ->
@@ -47,7 +49,7 @@ fun HomeScreen(
                 .fillMaxSize()
         ) {
             if (bookingsEntries.isEmpty()) {
-                Text("There are no booking entries")
+                Text(stringResource(R.string.no_booking_entries))
             } else {
                 LazyColumn {
                     items(bookingsEntries) { bookingEntry ->
@@ -83,7 +85,7 @@ fun BookingEntryItem(
                     text = bookingEntry.name,
                     style = MaterialTheme.typography.titleMedium
                 )
-                val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(
+                val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(
                     Locale.getDefault()
                 ).withZone(ZoneId.systemDefault())
                 val date = "${bookingEntry.arrivalDate.format(formatter)} - ${
@@ -95,7 +97,10 @@ fun BookingEntryItem(
                 )
             }
             IconButton(onClick = onDeleteClick) {
-                Icon(Icons.Default.Delete, contentDescription = "Delete booking")
+                Icon(
+                    Icons.Default.Delete,
+                    contentDescription = stringResource(R.string.delete_booking)
+                )
             }
         }
     }

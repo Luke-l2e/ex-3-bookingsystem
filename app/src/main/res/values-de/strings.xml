@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Buchungen</string>
+    <string name="add_booking_entry">Buchungseintrag hinzufügen</string>
+    <string name="name">Name</string>
+    <string name="select_date_range">Datenbereich auswählen</string>
+    <string name="save">Speichern</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="back">Zurück</string>
+    <string name="add_booking">Buchung hinzufügen</string>
+    <string name="delete_booking">Buchung löschen</string>
+    <string name="no_booking_entries">Keine Buchungen vorhanden</string>
+
+    <!-- Error Messages -->
+    <string name="invalid_booking_entry">Bitte gib einen Namen und ein gültiges Start- und Enddatum an.</string>
+</resources>

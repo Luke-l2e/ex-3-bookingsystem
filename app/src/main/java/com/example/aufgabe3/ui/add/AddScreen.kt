@@ -12,7 +12,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DateRangePicker
-import androidx.compose.material3.DateRangePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,14 +29,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.aufgabe3.R
 import com.example.aufgabe3.viewmodel.SharedViewModel
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,10 +56,13 @@ fun AddScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Add Booking Entry") },
+                title = { Text(stringResource(R.string.add_booking_entry)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                        )
                     }
                 }
             )
@@ -74,7 +76,7 @@ fun AddScreen(
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text("Name") },
+                label = { Text(stringResource(R.string.name)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -87,7 +89,7 @@ fun AddScreen(
                     ""
                 },
                 onValueChange = {},
-                label = { Text("Select Date Range") },
+                label = { Text(stringResource(R.string.select_date_range)) },
                 enabled = false,
                 readOnly = true,
                 modifier = Modifier
@@ -105,15 +107,22 @@ fun AddScreen(
             )
 
             Spacer(modifier = Modifier.height(24.dp))
-
             Button(
                 onClick = {
-                    sharedViewModel.addBookingEntry(arrivalDate!!, departureDate!!, name)
-                    navController.popBackStack()
+                    if (isBookEntryValid(arrivalDate, departureDate, name)) {
+                        sharedViewModel.addBookingEntry(arrivalDate!!, departureDate!!, name.trim())
+                        navController.popBackStack()
+                    } else {
+                        Toast.makeText(
+                            navController.context,
+                            R.string.invalid_booking_entry,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Save")
+                Text(stringResource(R.string.save))
             }
         }
     }
@@ -123,43 +132,23 @@ fun AddScreen(
             onDateRangeSelected = { dateRange ->
                 val startDate = dateRange.first
                 val endDate = dateRange.second
-                if (null == dateRange.first || null == dateRange.second) {
-                    Toast.makeText(
-                        navController.context,
-                        "Please choose an arrival and departure date",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@DateRangePickerModal
-                }
-                if (startDate!! > endDate!!) {
-                    Toast.makeText(
-                        navController.context,
-                        "Arrival date has to be before departure date",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@DateRangePickerModal
-                }
-                if (startDate < LocalDate.now().toEpochDay()) {
-                    Toast.makeText(
-                        navController.context,
-                        "Arrival date has to be today or later",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@DateRangePickerModal
-                }
-                arrivalDate = convertToLocalDateUsingEpoch(startDate)
-                departureDate = convertToLocalDateUsingEpoch(endDate)
+                arrivalDate = startDate?.let { convertToLocalDate(it) }
+                departureDate = endDate?.let { convertToLocalDate(it) }
                 showDateRangePicker = false
+            },
+
+            validateDate = { dateToValidate ->
+                !convertToLocalDate(dateToValidate).isBefore(LocalDate.now())
             })
     }
-    // TODO implement DateRangePicker Dialog logic
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateRangePickerModal(
     onDateRangeSelected: (Pair<Long?, Long?>) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    validateDate: (Long) -> Boolean
 ) {
     val dateRangePickerState = rememberDateRangePickerState()
 
@@ -177,12 +166,12 @@ fun DateRangePickerModal(
                     onDismiss()
                 }
             ) {
-                Text("OK")
+                Text(stringResource(R.string.ok))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(R.string.cancel))
             }
         }
     ) {
@@ -190,21 +179,19 @@ fun DateRangePickerModal(
             state = dateRangePickerState,
             title = {
                 Text(
-                    text = "Select date range"
+                    text = stringResource(R.string.select_date_range)
                 )
             },
-            showModeToggle = false,
+            showModeToggle = false, dateValidator = { validateDate(it) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(500.dp)
                 .padding(16.dp)
         )
     }
-
-    // TODO implement DateRangePicker see https://developer.android.com/develop/ui/compose/components/datepickers?hl=de
 }
 
-fun convertToLocalDateUsingEpoch(timestamp: Long): LocalDate {
+fun convertToLocalDate(timestamp: Long): LocalDate {
     return timestamp.let {
         LocalDateTime.ofEpochSecond(
             it / 1000, 0, ZoneId.systemDefault().rules.getOffset(
@@ -212,4 +199,8 @@ fun convertToLocalDateUsingEpoch(timestamp: Long): LocalDate {
             )
         ).toLocalDate()
     }
+}
+
+fun isBookEntryValid(arrivalDate: LocalDate?, departureDate: LocalDate?, name: String?): Boolean {
+    return !(null == arrivalDate || null == departureDate || name.isNullOrBlank())
 }
