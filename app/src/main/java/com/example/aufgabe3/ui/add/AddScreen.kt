@@ -39,6 +39,16 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
+/**
+ * A screen for adding a new booking entry.
+ *
+ * This composable function provides a UI to input booking details, including the name,
+ * arrival date, and departure date. Users can select a date range using a modal date range picker.
+ * The screen also handles input validation and saves the booking entry via the shared view model.
+ *
+ * @param navController The navigation controller for navigating between screens.
+ * @param sharedViewModel The shared view model used for adding a new booking entry.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddScreen(
@@ -143,6 +153,18 @@ fun AddScreen(
     }
 }
 
+/**
+ * A modal dialog for selecting a date range.
+ *
+ * This composable displays a date picker in a modal dialog, allowing users to select a start
+ * and end date. The selected date range is returned to the parent composable through a callback.
+ *
+ * @param onDateRangeSelected Callback invoked when a date range is selected. Returns a pair of
+ * start and end date timestamps (in milliseconds) or `null` if no date is selected.
+ * @param onDismiss Callback invoked when the dialog is dismissed without selection.
+ * @param validateDate A lambda function to validate selectable dates. Should return true for
+ * valid dates and false otherwise.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateRangePickerModal(
@@ -191,6 +213,15 @@ fun DateRangePickerModal(
     }
 }
 
+/**
+ * Converts a timestamp (in milliseconds) to a `LocalDate`.
+ *
+ * This utility function converts an epoch timestamp to a `LocalDate` object using the
+ * system's default time zone.
+ *
+ * @param timestamp The timestamp in milliseconds to be converted.
+ * @return The corresponding `LocalDate` instance.
+ */
 fun convertToLocalDate(timestamp: Long): LocalDate {
     return timestamp.let {
         LocalDateTime.ofEpochSecond(
@@ -201,6 +232,17 @@ fun convertToLocalDate(timestamp: Long): LocalDate {
     }
 }
 
+/**
+ * Validates the input data for a booking entry.
+ *
+ * This utility function checks if the arrival date, departure date, and name are
+ * valid. The name must not be null or blank, and both dates must be non-null.
+ *
+ * @param arrivalDate The arrival date of the booking.
+ * @param departureDate The departure date of the booking.
+ * @param name The name associated with the booking.
+ * @return True if the input data is valid; false otherwise.
+ */
 fun isBookEntryValid(arrivalDate: LocalDate?, departureDate: LocalDate?, name: String?): Boolean {
     return !(null == arrivalDate || null == departureDate || name.isNullOrBlank())
 }

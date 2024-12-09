@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Booking Entries</string>
-    <string name="add_booking_entry">Add Booking Entry</string>
-    <string name="name">Name</string>
-    <string name="select_date_range">Select Date Range</string>
-    <string name="save">Save</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
-    <string name="back">Back</string>
     <string name="add_booking">Add booking</string>
+    <string name="add_booking_entry">Add Booking Entry</string>
+    <string name="app_name">Booking Entries</string>
+    <string name="back">Back</string>
+    <string name="cancel">Cancel</string>
     <string name="delete_booking">Delete booking</string>
-    <string name="no_booking_entries">There are no booking entries</string>
-
-    <!-- Error Messages -->
     <string name="invalid_booking_entry">Please enter a name and select a valid arrival and departure date</string>
+    <string name="name">Name</string>
+    <string name="no_booking_entries">There are no booking entries</string>
+    <string name="ok">OK</string>
+    <string name="save">Save</string>
+    <string name="select_date_range">Select Date Range</string>
 </resources>

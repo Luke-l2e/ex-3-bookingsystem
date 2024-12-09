@@ -11,6 +11,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.aufgabe3.navigation.AppNavHost
 import com.example.aufgabe3.ui.theme.Aufgabe3Theme
 
+/**
+ * The main activity of the application.
+ *
+ * This activity serves as the entry point of the app and sets up the UI theme, navigation host,
+ * and the main content. It uses Jetpack Compose to define the UI components and applies the
+ * application's theme.
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

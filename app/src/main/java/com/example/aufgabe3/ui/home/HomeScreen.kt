@@ -37,6 +37,17 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
 
+/**
+ * Displays the Home screen of the application.
+ *
+ * The Home screen includes a top app bar, a list of booking entries, and a floating action button
+ * for navigating to the "AddScreen.kt" screen. If no booking entries exist, a placeholder message
+ * is displayed.
+ *
+ * @param navController The navigation controller used to navigate between screens.
+ * @param sharedViewModel The shared view model providing the booking entries and actions for
+ * modifying the data.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
@@ -83,6 +94,15 @@ fun HomeScreen(
     }
 }
 
+/**
+ * Displays a single booking entry as a card.
+ *
+ * Each card shows the booking name and the arrival and departure dates formatted for the user's
+ * locale. A delete button is provided for removing the booking entry.
+ *
+ * @param bookingEntry The booking entry to be displayed, containing the booking details.
+ * @param onDeleteClick A lambda function to be invoked when the delete button is clicked.
+ */
 @Composable
 fun BookingEntryItem(
     bookingEntry: BookingEntry,
