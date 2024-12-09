@@ -85,3 +85,7 @@ Es soll eine Android-App mit Jetpack Compose entwickeln, die folgende Funktionen
 ---
 
 **Viel Erfolg bei der Umsetzung der Aufgabe!**
+
+# Credits
+<a href="https://www.flaticon.com/free-icons/booking" title="Booking icons">Booking icons created by
+Aldo Cervantes - Flaticon</a>
